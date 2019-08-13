@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Bitgener demo, a lightweight and zero-dependencies pure Node.js barcode library">
+    <meta name="author" content="adrien v">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <title>Bitgener</title>
+  </head>
+  <style>
+    /* variables */
+    :root {
+      --fontFamily: monospace;
+      --fontSize: 1.4rem;
+      --colorBitcoin: #F7931A;
+      --colorTextPrimary: rgb(219, 219, 219);
+      --colorTextError: rgb(225, 32, 32);
+      --colorInputText: rgb(34, 34, 34);
+      --colorPlaceholder: #5e35b1;
+      --colorBackground: rgb(34, 34, 34);
+    }
+
+    /* global styles */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      height: 100%;
+      font-size: 62.5%;
+    }
+
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+
+      background-color: var(--colorBackground);
+      color: var(--colorTextPrimary);
+
+      font-family: var(--fontFamily);
+      font-size: var(--fontSize);
+    }
+
+    /* global wrapper */
+    .wrapper {
+      min-height: 100%;
+      height: auto !important;
+      height: 100%;
+      width: 100%;
+      margin: 0 auto;
+
+      display: flex;
+      flex-flow: column;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* simple flexbox grid system */
+
+    /* row */
+    .row {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+    }
+    .content-between {
+      justify-content: space-between;
+    }
+    .content-around {
+      justify-content: space-around;
+    }
+    .content-evenly {
+      justify-content: space-evenly;
+    }
+    .content-center {
+      justify-content: center;
+    }
+    .content-start {
+      justify-content: flex-start;
+    }
+    .content-end {
+      justify-content: flex-end;
+    }
+
+    /* column */
+    .col {
+      display: flex;
+      flex-direction: column;
+      flex-wrap: nowrap;
+    }
+    .items-center {
+      align-items: center;
+    }
+    .items-stretch {
+      align-items: stretch;
+    }
+    .items-start {
+      align-items: flex-start;
+    }
+    .items-end {
+      align-items: flex-end;
+    }
+
+    /* wrap and fluid */
+    .wrap {
+      flex-wrap: wrap;
+    }
+    .fluid {
+      width: 100%;
+    }
+    .mid-fluid {
+      width: 80%;
+    }
+
+    /* rounded effect */
+    .rounded {
+      border-radius: 50%;
+    }
+
+    /* hide and show effect */
+    .grayScale {
+      opacity: 1;
+      animation: grayScale 500ms;
+    }
+
+    @keyframes grayScale {
+      from { filter: grayscale(100%); }
+      to { filter: grayscale(0); }
+    }
+
+    /* SECTION bitcode */
+    #bitcode {
+      overflow: hidden;
+      transition: all 500ms;
+    }
+
+    /* SECTION error */
+    #error {
+      color: var(--colorTextError);
+      padding: 0.9rem;
+    }
+
+    /* SECTION params */
+    #paramsForm .block {
+      min-width: 318px;
+      margin-bottom: 5%;
+    }
+
+    #paramsForm .param label {
+      color: var(--colorBitcoin);
+      margin-right: 10%;
+      transition: all 500ms;
+    }
+
+    /* input text and select box */
+    .input-select {
+      margin: 0;
+      padding: 0.5rem;
+      color: var(--colorInputText);
+      font-family: inherit;
+      font-size: var(--fontSize);
+      font-weight: inherit;
+      border: none;
+      border-radius: 0.4rem;
+      transition: box-shadow 300ms;
+    }
+
+    .input-select:focus {
+      outline: none;
+      box-shadow: 0.2rem 0.8rem 1.6rem black;
+    }
+
+    .input-select::placeholder {
+      outline: none;
+      color: var(--colorPlaceholder);
+    }
+
+    /* hide outline */
+    .hide-outline {
+      color: transparent;
+      text-shadow: 0 0 0 var(--colorInputText);
+    }
+
+    /* hide select arrow */
+    .hide-arrow {
+      position: relative;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      text-indent: 1px;
+      text-overflow: '';
+    }
+
+    .hide-param {
+      opacity: 0.25;
+    }
+
+    /* checkbox */
+    input[type="checkbox"] {
+      cursor: pointer;
+    }
+
+    /* SECTION process: reset + generate */
+    #process {
+      min-width: 318px;
+    }
+
+    .button {
+      margin: 0;
+      padding: 0.9rem;
+      font-family: inherit;
+      font-size: var(--fontSize);
+      font-weight: inherit;
+      border: 2px solid;
+      border-radius: 0.4rem;
+      border-color: var(--colorTextPrimary);
+      transition: all 300ms;
+      cursor: pointer;
+    }
+
+    .button:hover, .button:focus {
+      outline: none;
+      box-shadow: 0.2rem 0.8rem 1.6rem black;
+    }
+
+    #reset {
+      background-color: transparent;
+      color: var(--colorTextPrimary);
+    }
+
+    #reset:hover {
+      background: var(--colorTextPrimary);
+      color: var(--colorBackground);
+    }
+
+    #generate {
+      background-color: var(--colorTextPrimary);
+      color: var(--colorBackground);
+    }
+
+    #generate:hover {
+      background: transparent;
+      color: var(--colorTextPrimary);
+    }
+
+    @media (max-width: 1280px) {
+      #paramsForm {
+        flex-direction: column;
+        justify-content: center;
+      }
+    }
+  </style>
+  <body>
+    <main class="wrapper">
+      <p id="visitors"></p>
+      <section id="bitcode"></section>
+      <section id="error"></section>
+      <form id="paramsForm" class="row content-between items-center mid-fluid wrap">
+        <!-- first parameter block -->
+        <div class="block col items-stretch">
+
+          <!-- data -->
+          <p class="param row items-center">
+            <label for="data">data</label>
+            <input type="text" id="data" class="input-select hide-outline" name="data" value="Bitgener Demo" placeholder="data to encode" required>
+          </p>
+
+          <!-- type -->
+          <p class="param row items-center">
+            <label for="type">type</label>
+            <select id="type" class="input-select hide-outline hide-arrow" name="type">
+              <option value="codabar">codabar</option>
+              <option value="code11">code11</option>
+              <option value="code39">code39</option>
+              <option value="code93">code93</option>
+              <option value="code128">code128</option>
+              <option value="ean8">ean8</option>
+              <option value="ean13">ean13</option>
+              <option value="std25">std25 (standard 2 of 5)</option>
+              <option value="int25">int25 (interleaved 2 of 5)</option>
+              <option value="msi">msi</option>
+              <option value="upc">upc</option>
+              <option value="datamatrix" selected>datamatrix</option>
+            </select>
+          </p>
+
+          <!-- crc -->
+          <p class="param row items-center">
+            <label for="crc">cyclic redundancy check</label>
+            <input type="checkbox" id="crc" name="crc">
+          </p>
+
+          <!-- rectangular -->
+          <p class="param row items-center">
+            <label for="rectangular">rectangular</label>
+            <input type="checkbox" id="rectangular" name="rectangular" checked>
+          </p>
+
+          <!-- padding -->
+          <p class="param row items-center">
+            <label for="padding">padding</label>
+            <input type="range" id="padding" name="padding" value="0" min="0" max="150">
+          </p>
+
+          <!-- width -->
+          <p class="param row items-center">
+            <label for="width">width</label>
+            <input type="range" id="width" name="width" value="250" min="10" max="4096">
+          </p>
+
+          <!-- height -->
+          <p class="param row items-center">
+            <label for="height">height</label>
+            <input type="range" id="height" name="height" value="250" min="10" max="4096">
+          </p>
+        </div>
+
+        <!-- second parameter block -->
+        <div class="block col items-stretch">
+          <!-- barWidth -->
+          <p class="param row items-center">
+            <label for="barWidth">bar width</label>
+            <input type="range" id="barWidth" name="barWidth" value="1" min="1" max="25">
+          </p>
+
+          <!-- barHeight -->
+          <p class="param row items-center">
+            <label for="barHeight">bar height</label>
+            <input type="range" id="barHeight" name="barHeight" value="150" min="1" max="1000">
+          </p>
+
+          <!-- original1DSize -->
+          <p class="param row items-center">
+            <label for="original1DSize">original 1D size</label>
+            <input type="checkbox" id="original1DSize" name="original1DSize">
+          </p>
+
+          <!-- original2DSize -->
+          <p class="param row items-center">
+            <label for="original2DSize">original 2D size</label>
+            <input type="checkbox" id="original2DSize" name="original2DSize">
+          </p>
+
+          <!-- addQuietZone -->
+          <p class="param row items-center">
+            <label for="addQuietZone">add quiet zone</label>
+            <input type="checkbox" id="addQuietZone" name="addQuietZone">
+          </p>
+
+          <!-- color -->
+          <p class="param row items-center">
+            <label for="color">color</label>
+            <select id="color" class="input-select hide-outline hide-arrow" name="color">
+              <option value="aliceblue">aliceblue</option>
+              <option value="antiquewhite">antiquewhite</option>
+              <option value="aqua">aqua</option>
+              <option value="aquamarine">aquamarine</option>
+              <option value="azure">azure</option>
+              <option value="beige">beige</option>
+              <option value="bisque">bisque</option>
+              <option value="black">black</option>
+              <option value="blanchedalmond">blanchedalmond</option>
+              <option value="blue">blue</option>
+              <option value="blueviolet">blueviolet</option>
+              <option value="brown">brown</option>
+              <option value="burlywood">burlywood</option>
+              <option value="cadetblue">cadetblue</option>
+              <option value="chartreuse">chartreuse</option>
+              <option value="chocolate">chocolate</option>
+              <option value="coral">coral</option>
+              <option value="cornflowerblue">cornflowerblue</option>
+              <option value="cornsilk">cornsilk</option>
+              <option value="crimson">crimson</option>
+              <option value="cyan">cyan</option>
+              <option value="darkblue">darkblue</option>
+              <option value="darkcyan">darkcyan</option>
+              <option value="darkgoldenrod">darkgoldenrod</option>
+              <option value="darkgray">darkgray</option>
+              <option value="darkgreen">darkgreen</option>
+              <option value="darkgrey">darkgrey</option>
+              <option value="darkkhaki">darkkhaki</option>
+              <option value="darkmagenta">darkmagenta</option>
+              <option value="darkolivegreen">darkolivegreen</option>
+              <option value="darkorange">darkorange</option>
+              <option value="darkorchid">darkorchid</option>
+              <option value="darkred">darkred</option>
+              <option value="darksalmon">darksalmon</option>
+              <option value="darkseagreen">darkseagreen</option>
+              <option value="darkslateblue">darkslateblue</option>
+              <option value="darkslategray">darkslategray</option>
+              <option value="darkslategrey">darkslategrey</option>
+              <option value="darkturquoise">darkturquoise</option>
+              <option value="darkviolet">darkviolet</option>
+              <option value="deeppink">deeppink</option>
+              <option value="deepskyblue">deepskyblue</option>
+              <option value="dimgray">dimgray</option>
+              <option value="dimgrey">dimgrey</option>
+              <option value="dodgerblue">dodgerblue</option>
+              <option value="firebrick">firebrick</option>
+              <option value="floralwhite">floralwhite</option>
+              <option value="forestgreen">forestgreen</option>
+              <option value="fuchsia">fuchsia</option>
+              <option value="gainsboro">gainsboro</option>
+              <option value="ghostwhite">ghostwhite</option>
+              <option value="gold">gold</option>
+              <option value="goldenrod">goldenrod</option>
+              <option value="gray">gray</option>
+              <option value="grey">grey</option>
+              <option value="green">green</option>
+              <option value="greenyellow">greenyellow</option>
+              <option value="honeydew">honeydew</option>
+              <option value="hotpink">hotpink</option>
+              <option value="indianred">indianred</option>
+              <option value="indigo">indigo</option>
+              <option value="ivory">ivory</option>
+              <option value="khaki">khaki</option>
+              <option value="lavender">lavender</option>
+              <option value="lavenderblush">lavenderblush</option>
+              <option value="lawngreen">lawngreen</option>
+              <option value="lemonchiffon">lemonchiffon</option>
+              <option value="lightblue">lightblue</option>
+              <option value="lightcoral">lightcoral</option>
+              <option value="lightcyan">lightcyan</option>
+              <option value="lightgoldenrodyellow">lightgoldenrodyellow</option>
+              <option value="lightgray">lightgray</option>
+              <option value="lightgreen">lightgreen</option>
+              <option value="lightgrey">lightgrey</option>
+              <option value="lightpink">lightpink</option>
+              <option value="lightsalmon">lightsalmon</option>
+              <option value="lightseagreen">lightseagreen</option>
+              <option value="lightskyblue">lightskyblue</option>
+              <option value="lightslategray">lightslategray</option>
+              <option value="lightslategrey">lightslategrey</option>
+              <option value="lightsteelblue">lightsteelblue</option>
+              <option value="lightyellow">lightyellow</option>
+              <option value="lime">lime</option>
+              <option value="limegreen">limegreen</option>
+              <option value="linen">linen</option>
+              <option value="magenta">magenta</option>
+              <option value="maroon">maroon</option>
+              <option value="mediumaquamarine">mediumaquamarine</option>
+              <option value="mediumblue">mediumblue</option>
+              <option value="mediumorchid">mediumorchid</option>
+              <option value="mediumpurple">mediumpurple</option>
+              <option value="mediumseagreen">mediumseagreen</option>
+              <option value="mediumslateblue">mediumslateblue</option>
+              <option value="mediumspringgreen">mediumspringgreen</option>
+              <option value="mediumturquoise">mediumturquoise</option>
+              <option value="mediumvioletred">mediumvioletred</option>
+              <option value="midnightblue">midnightblue</option>
+              <option value="mintcream">mintcream</option>
+              <option value="mistyrose">mistyrose</option>
+              <option value="moccasin">moccasin</option>
+              <option value="navajowhite">navajowhite</option>
+              <option value="navy">navy</option>
+              <option value="oldlace">oldlace</option>
+              <option value="olive">olive</option>
+              <option value="olivedrab">olivedrab</option>
+              <option value="orange" selected>orange</option>
+              <option value="orangered">orangered</option>
+              <option value="orchid">orchid</option>
+              <option value="palegoldenrod">palegoldenrod</option>
+              <option value="palegreen">palegreen</option>
+              <option value="paleturquoise">paleturquoise</option>
+              <option value="palevioletred">palevioletred</option>
+              <option value="papayawhip">papayawhip</option>
+              <option value="peachpuff">peachpuff</option>
+              <option value="peru">peru</option>
+              <option value="pink">pink</option>
+              <option value="plum">plum</option>
+              <option value="powderblue">powderblue</option>
+              <option value="purple">purple</option>
+              <option value="red">red</option>
+              <option value="rosybrown">rosybrown</option>
+              <option value="royalblue">royalblue</option>
+              <option value="saddlebrown">saddlebrown</option>
+              <option value="salmon">salmon</option>
+              <option value="sandybrown">sandybrown</option>
+              <option value="seagreen">seagreen</option>
+              <option value="seashell">seashell</option>
+              <option value="sienna">sienna</option>
+              <option value="silver">silver</option>
+              <option value="skyblue">skyblue</option>
+              <option value="slateblue">slateblue</option>
+              <option value="slategray">slategray</option>
+              <option value="slategrey">slategrey</option>
+              <option value="snow">snow</option>
+              <option value="springgreen">springgreen</option>
+              <option value="steelblue">steelblue</option>
+              <option value="tan">tan</option>
+              <option value="teal">teal</option>
+              <option value="thistle">thistle</option>
+              <option value="tomato">tomato</option>
+              <option value="turquoise">turquoise</option>
+              <option value="violet">violet</option>
+              <option value="wheat">wheat</option>
+              <option value="white">white</option>
+              <option value="whitesmoke">whitesmoke</option>
+              <option value="yellow">yellow</option>
+              <option value="yellowgreen">yellowgreen</option>
+            </select>
+          </p>
+
+          <!-- bgColor -->
+          <p class="param row items-center">
+            <label for="bgColor">background color</label>
+            <select id="bgColor" class="input-select hide-outline hide-arrow" name="bgColor">
+              <option value="aliceblue">aliceblue</option>
+              <option value="antiquewhite">antiquewhite</option>
+              <option value="aqua">aqua</option>
+              <option value="aquamarine">aquamarine</option>
+              <option value="azure">azure</option>
+              <option value="beige">beige</option>
+              <option value="bisque">bisque</option>
+              <option value="black">black</option>
+              <option value="blanchedalmond">blanchedalmond</option>
+              <option value="blue">blue</option>
+              <option value="blueviolet">blueviolet</option>
+              <option value="brown">brown</option>
+              <option value="burlywood">burlywood</option>
+              <option value="cadetblue">cadetblue</option>
+              <option value="chartreuse">chartreuse</option>
+              <option value="chocolate">chocolate</option>
+              <option value="coral">coral</option>
+              <option value="cornflowerblue">cornflowerblue</option>
+              <option value="cornsilk">cornsilk</option>
+              <option value="crimson">crimson</option>
+              <option value="cyan">cyan</option>
+              <option value="darkblue">darkblue</option>
+              <option value="darkcyan">darkcyan</option>
+              <option value="darkgoldenrod">darkgoldenrod</option>
+              <option value="darkgray">darkgray</option>
+              <option value="darkgreen">darkgreen</option>
+              <option value="darkgrey">darkgrey</option>
+              <option value="darkkhaki">darkkhaki</option>
+              <option value="darkmagenta">darkmagenta</option>
+              <option value="darkolivegreen">darkolivegreen</option>
+              <option value="darkorange">darkorange</option>
+              <option value="darkorchid">darkorchid</option>
+              <option value="darkred">darkred</option>
+              <option value="darksalmon">darksalmon</option>
+              <option value="darkseagreen">darkseagreen</option>
+              <option value="darkslateblue">darkslateblue</option>
+              <option value="darkslategray">darkslategray</option>
+              <option value="darkslategrey">darkslategrey</option>
+              <option value="darkturquoise">darkturquoise</option>
+              <option value="darkviolet">darkviolet</option>
+              <option value="deeppink">deeppink</option>
+              <option value="deepskyblue">deepskyblue</option>
+              <option value="dimgray">dimgray</option>
+              <option value="dimgrey">dimgrey</option>
+              <option value="dodgerblue">dodgerblue</option>
+              <option value="firebrick">firebrick</option>
+              <option value="floralwhite">floralwhite</option>
+              <option value="forestgreen">forestgreen</option>
+              <option value="fuchsia">fuchsia</option>
+              <option value="gainsboro">gainsboro</option>
+              <option value="ghostwhite">ghostwhite</option>
+              <option value="gold">gold</option>
+              <option value="goldenrod">goldenrod</option>
+              <option value="gray">gray</option>
+              <option value="grey">grey</option>
+              <option value="green">green</option>
+              <option value="greenyellow">greenyellow</option>
+              <option value="honeydew">honeydew</option>
+              <option value="hotpink">hotpink</option>
+              <option value="indianred">indianred</option>
+              <option value="indigo">indigo</option>
+              <option value="ivory">ivory</option>
+              <option value="khaki">khaki</option>
+              <option value="lavender">lavender</option>
+              <option value="lavenderblush">lavenderblush</option>
+              <option value="lawngreen">lawngreen</option>
+              <option value="lemonchiffon">lemonchiffon</option>
+              <option value="lightblue">lightblue</option>
+              <option value="lightcoral">lightcoral</option>
+              <option value="lightcyan">lightcyan</option>
+              <option value="lightgoldenrodyellow">lightgoldenrodyellow</option>
+              <option value="lightgray">lightgray</option>
+              <option value="lightgreen">lightgreen</option>
+              <option value="lightgrey">lightgrey</option>
+              <option value="lightpink">lightpink</option>
+              <option value="lightsalmon">lightsalmon</option>
+              <option value="lightseagreen">lightseagreen</option>
+              <option value="lightskyblue">lightskyblue</option>
+              <option value="lightslategray">lightslategray</option>
+              <option value="lightslategrey">lightslategrey</option>
+              <option value="lightsteelblue">lightsteelblue</option>
+              <option value="lightyellow">lightyellow</option>
+              <option value="lime">lime</option>
+              <option value="limegreen">limegreen</option>
+              <option value="linen">linen</option>
+              <option value="magenta">magenta</option>
+              <option value="maroon">maroon</option>
+              <option value="mediumaquamarine">mediumaquamarine</option>
+              <option value="mediumblue">mediumblue</option>
+              <option value="mediumorchid">mediumorchid</option>
+              <option value="mediumpurple">mediumpurple</option>
+              <option value="mediumseagreen">mediumseagreen</option>
+              <option value="mediumslateblue">mediumslateblue</option>
+              <option value="mediumspringgreen">mediumspringgreen</option>
+              <option value="mediumturquoise">mediumturquoise</option>
+              <option value="mediumvioletred">mediumvioletred</option>
+              <option value="midnightblue">midnightblue</option>
+              <option value="mintcream">mintcream</option>
+              <option value="mistyrose">mistyrose</option>
+              <option value="moccasin">moccasin</option>
+              <option value="navajowhite">navajowhite</option>
+              <option value="navy">navy</option>
+              <option value="oldlace">oldlace</option>
+              <option value="olive">olive</option>
+              <option value="olivedrab">olivedrab</option>
+              <option value="orange">orange</option>
+              <option value="orangered">orangered</option>
+              <option value="orchid">orchid</option>
+              <option value="palegoldenrod">palegoldenrod</option>
+              <option value="palegreen">palegreen</option>
+              <option value="paleturquoise">paleturquoise</option>
+              <option value="palevioletred">palevioletred</option>
+              <option value="papayawhip">papayawhip</option>
+              <option value="peachpuff">peachpuff</option>
+              <option value="peru">peru</option>
+              <option value="pink">pink</option>
+              <option value="plum">plum</option>
+              <option value="powderblue">powderblue</option>
+              <option value="purple">purple</option>
+              <option value="red">red</option>
+              <option value="rosybrown">rosybrown</option>
+              <option value="royalblue">royalblue</option>
+              <option value="saddlebrown">saddlebrown</option>
+              <option value="salmon">salmon</option>
+              <option value="sandybrown">sandybrown</option>
+              <option value="seagreen">seagreen</option>
+              <option value="seashell">seashell</option>
+              <option value="sienna">sienna</option>
+              <option value="silver">silver</option>
+              <option value="skyblue">skyblue</option>
+              <option value="slateblue">slateblue</option>
+              <option value="slategray">slategray</option>
+              <option value="slategrey">slategrey</option>
+              <option value="snow">snow</option>
+              <option value="springgreen">springgreen</option>
+              <option value="steelblue">steelblue</option>
+              <option value="tan">tan</option>
+              <option value="teal">teal</option>
+              <option value="thistle">thistle</option>
+              <option value="tomato">tomato</option>
+              <option value="turquoise">turquoise</option>
+              <option value="violet">violet</option>
+              <option value="wheat">wheat</option>
+              <option value="white">white</option>
+              <option value="whitesmoke" selected>whitesmoke</option>
+              <option value="yellow">yellow</option>
+              <option value="yellowgreen">yellowgreen</option>
+            </select>
+          </p>
+        </div>
+
+        <!-- last parameter block -->
+        <div class="block col items-stretch">
+          <!-- hri -->
+          <p>hri (human readable interpretation)</p>
+
+          <!-- hri show -->
+          <p class="param row items-center">
+            <label for="show">show</label>
+            <input type="checkbox" id="show" name="show" checked>
+          </p>
+
+          <!-- hri fontFamily -->
+          <p class="param row items-center">
+            <label for="fontFamily">font family</label>
+            <select id="fontFamily" class="input-select hide-outline hide-arrow" name="fontFamily">
+              <option value="Sans-serif">Sans-serif</option>
+              <option value="Arial" selected>Arial</option>
+              <option value="Arial Black">Arial Black</option>
+              <option value="Arial Narrow">Arial Narrow</option>
+              <option value="Arial Rounded MT Bold">Arial Rounded MT Bold</option>
+              <option value="Avant Garde">Avant Garde</option>
+              <option value="Calibri">Calibri</option>
+              <option value="Candara">Candara</option>
+              <option value="Century Gothic">Century Gothic</option>
+              <option value="Franklin Gothic Medium">Franklin Gothic Medium</option>
+              <option value="Futura">Futura</option>
+              <option value="Geneva">Geneva</option>
+              <option value="Gill Sans">Gill Sans</option>
+              <option value="Helvetica">Helvetica</option>
+              <option value="Impact">Impact</option>
+              <option value="Lucida Grande">Lucida Grande</option>
+              <option value="Optima">Optima</option>
+              <option value="Segoe UI">Segoe UI</option>
+              <option value="Tahoma">Tahoma</option>
+              <option value="Trebuchet MS">Trebuchet MS</option>
+              <option value="Verdana">Verdana</option>
+              <option value="Serif">Serif</option>
+              <option value="Bodoni MT">Bodoni MT</option>
+              <option value="Book Antiqua">Book Antiqua</option>
+              <option value="Calisto MT">Calisto MT</option>
+              <option value="Cambria">Cambria</option>
+              <option value="Didot">Didot</option>
+              <option value="Garamond">Garamond</option>
+              <option value="Goudy Old Style">Goudy Old Style</option>
+              <option value="Lucida Bright">Lucida Bright</option>
+              <option value="Palatino">Palatino</option>
+              <option value="Perpetua">Perpetua</option>
+              <option value="Rockwell">Rockwell</option>
+              <option value="Rockwell Extra Bold">Rockwell Extra Bold</option>
+              <option value="Baskerville">Baskerville</option>
+              <option value="Times New Roman">Times New Roman</option>
+              <option value="Consolas">Consolas</option>
+              <option value="Courier New" selected>Courier New</option>
+              <option value="Lucida Console">Lucida Console</option>
+              <option value="Lucida Sans Typewriter">Lucida Sans Typewriter</option>
+              <option value="Monaco">Monaco</option>
+              <option value="Andale Mono">Andale Mono</option>
+              <option value="Copperlate">Copperlate</option>
+              <option value="Papyrus">Papyrus</option>
+              <option value="Brush Script MT">Brush Script MT</option>
+            </select>
+          </p>
+
+          <!-- fontSize -->
+          <p class="param row items-center">
+            <label for="fontSize">font size</label>
+            <input type="range" id="fontSize" name="fontSize" value="15" min="1" max="250">
+          </p>
+
+          <!-- marginTop -->
+          <p class="param row items-center">
+            <label for="marginTop">margin top</label>
+            <input type="range" id="marginTop" name="marginTop" value="0" min="0" max="250">
+          </p>
+        </div>
+      </form>
+
+      <!-- reset and generate section -->
+      <section id="process" class="row content-evenly">
+        <!-- reset button -->
+        <p>
+          <button type="button" id="reset" class="button" name="reset">reset</button>
+        </p>
+
+        <!-- generate button -->
+        <p>
+          <button type="button" id="generate" class="button" name="generate">generate!</button>
+        </p>
+      </section>
+    </main>
+  </body>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+      // constants
+      const socket = io();
+      const visitors = document.getElementById('visitors');
+      const bitcode = document.getElementById('bitcode');
+      const error = document.getElementById('error');
+      const paramsForm = document.getElementById('paramsForm');
+      const params = {
+        data: document.getElementById('data'),
+        type: document.getElementById('type'),
+        crc: document.getElementById('crc'),
+        rectangular: document.getElementById('rectangular'),
+        padding: document.getElementById('padding'),
+        width: document.getElementById('width'),
+        height: document.getElementById('height'),
+        barWidth: document.getElementById('barWidth'),
+        barHeight: document.getElementById('barHeight'),
+        original1DSize: document.getElementById('original1DSize'),
+        original2DSize: document.getElementById('original2DSize'),
+        addQuietZone: document.getElementById('addQuietZone'),
+        color: document.getElementById('color'),
+        bgColor: document.getElementById('bgColor'),
+        hri: {
+          show: document.getElementById('show'),
+          fontFamily: document.getElementById('fontFamily'),
+          fontSize: document.getElementById('fontSize'),
+          marginTop: document.getElementById('marginTop'),
+        },
+      };
+      const labels = {
+        data: document.querySelector('label[for=data]'),
+        type: document.querySelector('label[for=type]'),
+        crc: document.querySelector('label[for=crc]'),
+        rectangular: document.querySelector('label[for=rectangular]'),
+        padding: document.querySelector('label[for=padding]'),
+        width: document.querySelector('label[for=width]'),
+        height: document.querySelector('label[for=height]'),
+        barWidth: document.querySelector('label[for=barWidth]'),
+        barHeight: document.querySelector('label[for=barHeight]'),
+        original1DSize: document.querySelector('label[for=original1DSize]'),
+        original2DSize: document.querySelector('label[for=original2DSize]'),
+        addQuietZone: document.querySelector('label[for=addQuietZone]'),
+        color: document.querySelector('label[for=color]'),
+        bgColor: document.querySelector('label[for=bgColor]'),
+        show: document.querySelector('label[for=show]'),
+        fontFamily: document.querySelector('label[for=fontFamily]'),
+        fontSize: document.querySelector('label[for=fontSize]'),
+        marginTop: document.querySelector('label[for=marginTop]'),
+      };
+      const generate = document.getElementById('generate');
+      const reset = document.getElementById('reset');
+
+      const paramsUnavailableByType = {
+        codabar: ['crc', 'rectangular', 'original2DSize'],
+        code11: ['crc', 'rectangular', 'original2DSize'],
+        code39: ['crc', 'rectangular', 'original2DSize'],
+        code93: ['rectangular', 'original2DSize'],
+        code128: ['crc', 'rectangular', 'original2DSize'],
+        ean8: ['crc', 'rectangular', 'original2DSize'],
+        ean13: ['crc', 'rectangular', 'original2DSize'],
+        std25: ['rectangular', 'original2DSize'],
+        int25: ['rectangular', 'original2DSize'],
+        msi: ['rectangular', 'original2DSize'],
+        upc: ['crc', 'rectangular', 'original2DSize'],
+        datamatrix: ['crc', 'barWidth', 'barHeight', 'original1DSize', 'addQuietZone'],
+      };
+
+      // util functions
+
+      // update available params to be enabled regarding a bitcode type
+      const updateAvailableParams = function updateAvailableParams() {
+        if (paramsUnavailableByType[params.type.value] !== undefined) {
+          const paramsUnavailable = paramsUnavailableByType[params.type.value];
+
+          Object.keys(params).forEach((paramName) => {
+            // don't hri here
+            if (paramName !== 'hri') {
+              const parent = params[paramName].parentNode;
+
+              // param must be disabled
+              if (paramsUnavailable.indexOf(paramName) !== -1) {
+                params[paramName].disabled = true;
+
+                if (parent !== undefined) {
+                  parent.classList.add('hide-param');
+                }
+              } else {
+                // param must be enabled
+                params[paramName].disabled = false;
+
+                if (parent !== undefined) {
+                  parent.classList.remove('hide-param');
+                }
+              }
+            }
+          });
+        }
+
+        return false;
+      };
+
+      // update hri params regarding show checkbox
+      const updateHriParams = function updateHriParams() {
+        Object.keys(params.hri).forEach((paramName) => {
+          if (paramName !== 'show') {
+            const parent = params.hri[paramName].parentNode;
+
+            if (params.hri.show.checked === true) {
+              params.hri[paramName].disabled = false;
+
+              if (parent !== undefined) {
+                parent.classList.remove('hide-param');
+              }
+            } else {
+              params.hri[paramName].disabled = true;
+
+              if (parent !== undefined) {
+                parent.classList.add('hide-param');
+              }
+            }
+          }
+        });
+
+        return false;
+      };
+
+      // update params labels color regarding the bitcode color
+      const updateLabelsColor = function updateLabelsColor() {
+        Object.keys(labels).forEach((labelName) => {
+          labels[labelName].style.color = params.color.value;
+        });
+      };
+
+      // update elements relying on animation
+      const updateAnimatedElements = function updateAnimatedElements(e) {
+        if (e) {
+          if (e.animationName === 'grayScale') {
+            e.target.classList.remove('grayScale');
+          }
+        }
+      };
+
+      // generate the bitcode with the specified params values
+      const generateBitcode = function generateBitcode() {
+        const bitcodeParams = {
+          data: params.data.value,
+          type: params.type.value,
+          crc: params.crc.checked,
+          rectangular: params.rectangular.checked,
+          padding: params.padding.value,
+          width: params.width.value,
+          height: params.height.value,
+          barWidth: params.barWidth.value,
+          barHeight: params.barHeight.value,
+          original1DSize: params.original1DSize.checked,
+          original2DSize: params.original2DSize.checked,
+          addQuietZone: params.addQuietZone.checked,
+          color: params.color.value,
+          bgColor: params.bgColor.value,
+          hri: {
+            show: params.hri.show.checked,
+            fontFamily: params.hri.fontFamily.value,
+            fontSize: params.hri.fontSize.value,
+            marginTop: params.hri.marginTop.value,
+          },
+        };
+
+        socket.emit('generate', bitcodeParams);
+        return false;
+      };
+
+      // reset bitcode from form
+      const resetBitcode = function resetBitcode() {
+        paramsForm.reset();
+        updateAvailableParams();
+        generateBitcode();
+      };
+
+      // update nb visitors
+      const updateVisitors = function updateVisitors(nbVisitors) {
+        if (nbVisitors) {
+          visitors.textContent = `${nbVisitors} visitor${nbVisitors > 1 ? 's' : ''}`;
+        }
+      };
+
+      // update bitcode when generated from server
+      const updateBitcode = function updateBitcode(ret) {
+        if (ret) {
+          if (ret.error !== undefined) {
+            error.textContent = ret.error.message;
+          } else if (ret.svg !== undefined) {
+            error.textContent = '';
+            bitcode.innerHTML = ret.svg;
+            bitcode.classList.add('grayScale');
+            updateLabelsColor();
+          }
+        }
+      };
+
+      // first init
+      updateAvailableParams();
+      updateHriParams();
+      generateBitcode();
+
+      // dom events
+      document.onanimationend = updateAnimatedElements;
+      params.hri.show.onclick = updateHriParams;
+      params.type.onchange = updateAvailableParams;
+      generate.onclick = generateBitcode;
+      reset.onclick = resetBitcode;
+
+      // socket events
+      socket.on('visitors', updateVisitors);
+      socket.on('bitcode', updateBitcode);
+    });
+  </script>
+</html>

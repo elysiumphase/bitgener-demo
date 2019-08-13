@@ -1,0 +1,50 @@
+{
+  "name": "bitgener-demo",
+  "version": "1.0.0",
+  "description": "The Bitgener Demo",
+  "author": "Adrien Valcke",
+  "main": "index.js",
+  "private": false,
+  "preferGlobal": false,
+  "analyze": false,
+  "license": "MIT",
+  "engines": {
+    "node": "10.16.2",
+    "npm": "6.9.0"
+  },
+  "scripts": {
+    "test": "eslint index.js",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adrienv1520/bitgener-demo.git"
+  },
+  "keywords": [
+    "bitgener",
+    "demo",
+    "barcode",
+    "datamatrix",
+    "ecc200",
+    "std25",
+    "int25",
+    "ean8",
+    "ean13",
+    "upc",
+    "code11",
+    "code39",
+    "code93",
+    "code128",
+    "codabar",
+    "msi"
+  ],
+  "dependencies": {
+    "bitgener": "~1.0.0",
+    "socket.io": "~2.2.0"
+  },
+  "devDependencies": {
+    "eslint": "~5.9.0",
+    "eslint-config-airbnb-base": "~13.1.0",
+    "eslint-plugin-import": "~2.14.0"
+  }
+}
