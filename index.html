@@ -849,8 +849,6 @@
             }
           });
         }
-
-        return false;
       };
 
       // update hri params regarding show checkbox
@@ -874,8 +872,6 @@
             }
           }
         });
-
-        return false;
       };
 
       // update params labels color regarding the bitcode color
@@ -927,6 +923,7 @@
       const resetBitcode = function resetBitcode() {
         paramsForm.reset();
         updateAvailableParams();
+        updateHriParams();
         generateBitcode();
       };
 
@@ -951,7 +948,7 @@
         }
       };
 
-      // first init
+      // first init regarding default params values fixed
       updateAvailableParams();
       updateHriParams();
       generateBitcode();

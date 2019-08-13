@@ -1,6 +1,6 @@
 {
   "name": "bitgener-demo",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "The Bitgener Demo",
   "author": "Adrien Valcke",
   "main": "index.js",
