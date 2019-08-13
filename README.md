@@ -1,10 +1,14 @@
 <p align="center">
   <img src="bitgener.svg" alt="Bitgener Demo" style="border-radius:50%" />
-<p>
+</p>
+
+<h1 align="center">
+  The <a href="https://github.com/adrienv1520/bitgener.git">Bitgener</a> Demo.
+</h1>
 
 <p align="center">
-  The <a href="https://github.com/adrienv1520/bitgener.git">Bitgener</a> Demo.
-<p>
+  <a href="https://bitgener.herokuapp.com/">Show me!</a>
+</p>
 
 # Licence
 
