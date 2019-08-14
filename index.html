@@ -18,6 +18,7 @@
       --colorTextError: rgb(225, 32, 32);
       --colorInputText: rgb(34, 34, 34);
       --colorPlaceholder: #5e35b1;
+      --colorBackgroundParams: whitesmoke;
       --colorBackground: rgb(34, 34, 34);
     }
 
@@ -167,6 +168,7 @@
       border: none;
       border-radius: 0.4rem;
       transition: box-shadow 300ms;
+      background-color: var(--colorBackgroundParams);
     }
 
     .input-select:focus {
@@ -216,7 +218,7 @@
       font-weight: inherit;
       border: 2px solid;
       border-radius: 0.4rem;
-      border-color: var(--colorTextPrimary);
+      border-color: var(--colorBackgroundParams);
       transition: all 300ms;
       cursor: pointer;
     }
@@ -228,22 +230,22 @@
 
     #reset {
       background-color: transparent;
-      color: var(--colorTextPrimary);
+      color: var(--colorBackgroundParams);
     }
 
     #reset:hover {
-      background: var(--colorTextPrimary);
+      background: var(--colorBackgroundParams);
       color: var(--colorBackground);
     }
 
     #generate {
-      background-color: var(--colorTextPrimary);
+      background-color: var(--colorBackgroundParams);
       color: var(--colorBackground);
     }
 
     #generate:hover {
       background: transparent;
-      color: var(--colorTextPrimary);
+      color: var(--colorBackgroundParams);
     }
 
     @media (max-width: 1280px) {
