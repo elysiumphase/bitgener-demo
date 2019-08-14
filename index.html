@@ -181,6 +181,11 @@
       color: var(--colorPlaceholder);
     }
 
+    /* input number */
+    input[type="number"] {
+      width: 5.5rem;
+    }
+
     /* hide outline */
     .hide-outline {
       color: transparent;
@@ -304,19 +309,19 @@
           <!-- padding -->
           <p class="param row items-center">
             <label for="padding">padding</label>
-            <input type="range" id="padding" name="padding" value="0" min="0" max="150">
+            <input type="number" id="padding" class="input-select hide-outline" name="padding" value="0" min="0" max="150">&nbsp;px
           </p>
 
           <!-- width -->
           <p class="param row items-center">
             <label for="width">width</label>
-            <input type="range" id="width" name="width" value="250" min="10" max="4096">
+            <input type="number" id="width" class="input-select hide-outline" name="width" value="250" min="10" max="4096">&nbsp;px
           </p>
 
           <!-- height -->
           <p class="param row items-center">
             <label for="height">height</label>
-            <input type="range" id="height" name="height" value="250" min="10" max="4096">
+            <input type="number" id="height" class="input-select hide-outline" name="height" value="250" min="10" max="4096">&nbsp;px
           </p>
         </div>
 
@@ -325,13 +330,13 @@
           <!-- barWidth -->
           <p class="param row items-center">
             <label for="barWidth">bar width</label>
-            <input type="range" id="barWidth" name="barWidth" value="1" min="1" max="25">
+            <input type="number" id="barWidth" class="input-select hide-outline" name="barWidth" value="1" min="1" max="25">&nbsp;px
           </p>
 
           <!-- barHeight -->
           <p class="param row items-center">
             <label for="barHeight">bar height</label>
-            <input type="range" id="barHeight" name="barHeight" value="150" min="1" max="1000">
+            <input type="number" id="barHeight" class="input-select hide-outline" name="barHeight" value="150" min="1" max="1024">&nbsp;px
           </p>
 
           <!-- original1DSize -->
@@ -727,13 +732,13 @@
           <!-- fontSize -->
           <p class="param row items-center">
             <label for="fontSize">font size</label>
-            <input type="range" id="fontSize" name="fontSize" value="15" min="1" max="250">
+            <input type="number" id="fontSize" class="input-select hide-outline" name="fontSize" value="15" min="1" max="250">&nbsp;px
           </p>
 
           <!-- marginTop -->
           <p class="param row items-center">
             <label for="marginTop">margin top</label>
-            <input type="range" id="marginTop" name="marginTop" value="0" min="0" max="250">
+            <input type="number" id="marginTop" class="input-select hide-outline" name="marginTop" value="0" min="0" max="250">&nbsp;px
           </p>
         </div>
       </form>

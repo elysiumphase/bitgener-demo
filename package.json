@@ -1,6 +1,6 @@
 {
   "name": "bitgener-demo",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "The Bitgener Demo",
   "author": "Adrien Valcke",
   "main": "index.js",
@@ -39,7 +39,7 @@
     "msi"
   ],
   "dependencies": {
-    "bitgener": "~1.0.0",
+    "bitgener": "~1.1.0",
     "socket.io": "~2.2.0"
   },
   "devDependencies": {
