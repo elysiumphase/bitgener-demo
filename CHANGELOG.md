@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 1.1.0 - delivery @17/01/2020
+
+- add onchange event on parameters to automatically generate barcode
+- update dependencies
+- update logo
+
 ## 1.0.3 - delivery @14/08/2019
 
 - change all input ranges to input number
