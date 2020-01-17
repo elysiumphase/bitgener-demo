@@ -962,10 +962,31 @@
 
       // dom events
       document.onanimationend = updateAnimatedElements;
-      params.hri.show.onclick = updateHriParams;
-      params.type.onchange = updateAvailableParams;
       generate.onclick = generateBitcode;
       reset.onclick = resetBitcode;
+
+      // params events
+      Object.keys(params).forEach((name) => {
+        if (name === 'hri') {
+          Object.keys(params.hri).forEach((hriName) => {
+            if (hriName === 'show') {
+              params.hri.show.onchange = function onChange() {
+                updateHriParams();
+                generateBitcode();
+              };
+            } else {
+              params.hri[hriName].onchange = generateBitcode;
+            }
+          });
+        } else if (name === 'type') {
+          params.type.onchange = function onChange() {
+            updateAvailableParams();
+            generateBitcode();
+          };
+        } else {
+          params[name].onchange = generateBitcode;
+        }
+      });
 
       // socket events
       socket.on('visitors', updateVisitors);
