@@ -55,6 +55,17 @@ const httpServer = http.createServer(async (request, response) => {
       response.statusCode = 500;
       response.end(`unable to load favicon: ${err.message}`);
     }
+  } else if (request.method === 'GET' && request.url === '/favicon.ico') {
+    try {
+      const favicon = getFileStream('favicon.ico', 'binary');
+      response.setHeader('Content-Type', 'image/x-icon');
+      response.statusCode = 200;
+      await pipeline(favicon, response);
+    } catch (err) {
+      console.error(err);
+      response.statusCode = 500;
+      response.end(`unable to load favicon: ${err.message}`);
+    }
   } else {
     response.statusCode = 404;
     response.end('not found');

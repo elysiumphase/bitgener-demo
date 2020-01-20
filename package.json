@@ -24,6 +24,7 @@
     "bitgener",
     "demo",
     "barcode",
+    "generator",
     "datamatrix",
     "ecc200",
     "std25",

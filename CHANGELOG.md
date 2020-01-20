@@ -6,6 +6,7 @@
 - update dependencies
 - update vm
 - use pipeline instead of pipe
+- add full support for favicon
 - update logo
 
 ## 1.0.3 - delivery @14/08/2019

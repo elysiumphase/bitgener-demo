@@ -210,7 +210,7 @@
       cursor: pointer;
     }
 
-    /* SECTION process: reset + generate */
+    /* SECTION process: reset */
     #process {
       min-width: 318px;
     }
@@ -961,11 +961,6 @@
         }
       };
 
-      // first init regarding default params values fixed
-      updateAvailableParams();
-      updateHriParams();
-      generateBitcode();
-
       // dom events
       document.onanimationend = updateAnimatedElements;
       reset.onclick = resetBitcode;
@@ -996,6 +991,11 @@
       // socket events
       socket.on('visitors', updateVisitors);
       socket.on('bitcode', updateBitcode);
+
+      // first init regarding default params values fixed
+      updateAvailableParams();
+      updateHriParams();
+      generateBitcode();
     });
   </script>
 </html>
