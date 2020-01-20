@@ -1,8 +1,11 @@
 const http = require('http');
 const { createReadStream } = require('fs');
+const { promisify } = require('util');
+const stream = require('stream');
 const socketIO = require('socket.io');
 const bitgener = require('bitgener');
 
+const pipeline = promisify(stream.pipeline);
 const port = process.env.PORT || 3000;
 
 /* eslint no-console: "off" */
@@ -35,7 +38,7 @@ const httpServer = http.createServer(async (request, response) => {
     try {
       const index = getFileStream('index.html', 'utf-8');
       response.statusCode = 200;
-      index.pipe(response, { end: true });
+      await pipeline(index, response);
     } catch (err) {
       console.error(err);
       response.statusCode = 500;
@@ -46,7 +49,7 @@ const httpServer = http.createServer(async (request, response) => {
       const favicon = getFileStream('favicon.png', 'binary');
       response.setHeader('Content-Type', 'image/png');
       response.statusCode = 200;
-      favicon.pipe(response);
+      await pipeline(favicon, response);
     } catch (err) {
       console.error(err);
       response.statusCode = 500;
