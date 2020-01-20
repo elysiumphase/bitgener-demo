@@ -1,16 +1,16 @@
 {
   "name": "bitgener-demo",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "The Bitgener Demo",
-  "author": "Adrien Valcke",
+  "author": "Adrien Valcke <adrienvalcke@icloud.com> (https://github.com/adrienv1520)",
   "main": "index.js",
   "private": false,
   "preferGlobal": false,
   "analyze": false,
   "license": "MIT",
   "engines": {
-    "node": "10.16.2",
-    "npm": "6.9.0"
+    "node": ">=10.0.0",
+    "npm": ">=5.6.0"
   },
   "scripts": {
     "test": "eslint index.js",
@@ -24,6 +24,7 @@
     "bitgener",
     "demo",
     "barcode",
+    "generator",
     "datamatrix",
     "ecc200",
     "std25",
@@ -39,7 +40,7 @@
     "msi"
   ],
   "dependencies": {
-    "bitgener": "~1.1.0",
+    "bitgener": "~1.2.2",
     "socket.io": "~2.2.0"
   },
   "devDependencies": {

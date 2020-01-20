@@ -148,7 +148,7 @@
     /* SECTION params */
     #paramsForm .block {
       min-width: 318px;
-      margin-bottom: 5%;
+      margin-bottom: 0%;
     }
 
     #paramsForm .param label {
@@ -210,7 +210,7 @@
       cursor: pointer;
     }
 
-    /* SECTION process: reset + generate */
+    /* SECTION process: reset */
     #process {
       min-width: 318px;
     }
@@ -243,20 +243,14 @@
       color: var(--colorBackground);
     }
 
-    #generate {
-      background-color: var(--colorBackgroundParams);
-      color: var(--colorBackground);
-    }
-
-    #generate:hover {
-      background: transparent;
-      color: var(--colorBackgroundParams);
-    }
-
     @media (max-width: 1280px) {
       #paramsForm {
         flex-direction: column;
         justify-content: center;
+      }
+
+      #paramsForm .block {
+        margin-bottom: 5%;
       }
     }
   </style>
@@ -323,10 +317,7 @@
             <label for="height">height</label>
             <input type="number" id="height" class="input-select hide-outline" name="height" value="250" min="10" max="4096">&nbsp;px
           </p>
-        </div>
 
-        <!-- second parameter block -->
-        <div class="block col items-stretch">
           <!-- barWidth -->
           <p class="param row items-center">
             <label for="barWidth">bar width</label>
@@ -338,7 +329,10 @@
             <label for="barHeight">bar height</label>
             <input type="number" id="barHeight" class="input-select hide-outline" name="barHeight" value="150" min="1" max="1024">&nbsp;px
           </p>
+        </div>
 
+        <!-- second parameter block -->
+        <div class="block col items-stretch">
           <!-- original1DSize -->
           <p class="param row items-center">
             <label for="original1DSize">original 1D size</label>
@@ -511,6 +505,12 @@
             </select>
           </p>
 
+          <!-- opacity -->
+          <p class="param row items-center">
+            <label for="opacity">opacity</label>
+            <input type="number" id="opacity" class="input-select hide-outline" name="opacity" value="1" min="0" max="1" step="0.01">
+          </p>
+
           <!-- bgColor -->
           <p class="param row items-center">
             <label for="bgColor">background color</label>
@@ -664,9 +664,15 @@
               <option value="yellowgreen">yellowgreen</option>
             </select>
           </p>
+
+          <!-- bgOpacity -->
+          <p class="param row items-center">
+            <label for="bgOpacity">bgOpacity</label>
+            <input type="number" id="bgOpacity" class="input-select hide-outline" name="bgOpacity" value="0" min="0" max="1" step="0.01">
+          </p>
         </div>
 
-        <!-- last parameter block -->
+        <!-- last parameters block -->
         <div class="block col items-stretch">
           <!-- hri -->
           <p>hri (human readable interpretation)</p>
@@ -743,16 +749,11 @@
         </div>
       </form>
 
-      <!-- reset and generate section -->
+      <!-- reset section -->
       <section id="process" class="row content-evenly">
         <!-- reset button -->
         <p>
           <button type="button" id="reset" class="button" name="reset">reset</button>
-        </p>
-
-        <!-- generate button -->
-        <p>
-          <button type="button" id="generate" class="button" name="generate">generate!</button>
         </p>
       </section>
     </main>
@@ -781,6 +782,8 @@
         addQuietZone: document.getElementById('addQuietZone'),
         color: document.getElementById('color'),
         bgColor: document.getElementById('bgColor'),
+        opacity: document.getElementById('opacity'),
+        bgOpacity: document.getElementById('bgOpacity'),
         hri: {
           show: document.getElementById('show'),
           fontFamily: document.getElementById('fontFamily'),
@@ -803,12 +806,13 @@
         addQuietZone: document.querySelector('label[for=addQuietZone]'),
         color: document.querySelector('label[for=color]'),
         bgColor: document.querySelector('label[for=bgColor]'),
+        opacity: document.querySelector('label[for=opacity]'),
+        bgOpacity: document.querySelector('label[for=bgOpacity]'),
         show: document.querySelector('label[for=show]'),
         fontFamily: document.querySelector('label[for=fontFamily]'),
         fontSize: document.querySelector('label[for=fontSize]'),
         marginTop: document.querySelector('label[for=marginTop]'),
       };
-      const generate = document.getElementById('generate');
       const reset = document.getElementById('reset');
 
       const paramsUnavailableByType = {
@@ -914,6 +918,8 @@
           addQuietZone: params.addQuietZone.checked,
           color: params.color.value,
           bgColor: params.bgColor.value,
+          opacity: params.opacity.value,
+          bgOpacity: params.bgOpacity.value,
           hri: {
             show: params.hri.show.checked,
             fontFamily: params.hri.fontFamily.value,
@@ -955,21 +961,41 @@
         }
       };
 
-      // first init regarding default params values fixed
-      updateAvailableParams();
-      updateHriParams();
-      generateBitcode();
-
       // dom events
       document.onanimationend = updateAnimatedElements;
-      params.hri.show.onclick = updateHriParams;
-      params.type.onchange = updateAvailableParams;
-      generate.onclick = generateBitcode;
       reset.onclick = resetBitcode;
+
+      // params events
+      Object.keys(params).forEach((name) => {
+        if (name === 'hri') {
+          Object.keys(params.hri).forEach((hriName) => {
+            if (hriName === 'show') {
+              params.hri.show.onchange = function onShowChange() {
+                updateHriParams();
+                generateBitcode();
+              };
+            } else {
+              params.hri[hriName].onchange = generateBitcode;
+            }
+          });
+        } else if (name === 'type') {
+          params.type.onchange = function onTypeChange() {
+            updateAvailableParams();
+            generateBitcode();
+          };
+        } else {
+          params[name].onchange = generateBitcode;
+        }
+      });
 
       // socket events
       socket.on('visitors', updateVisitors);
       socket.on('bitcode', updateBitcode);
+
+      // first init regarding default params values fixed
+      updateAvailableParams();
+      updateHriParams();
+      generateBitcode();
     });
   </script>
 </html>

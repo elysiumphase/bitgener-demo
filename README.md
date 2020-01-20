@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="bitgener.svg" alt="Bitgener Demo" style="border-radius:50%" />
+  <img src="bitgener.png" alt="Bitgener Demo" />
 </p>
 
 <h1 align="center">
@@ -14,7 +14,7 @@
 
 *bitgener-demo* is released under the MIT license.
 
-Copyright (C) 2019 Adrien Valcke
+Copyright (C) 2020 Adrien Valcke
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
