@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 1.1.1 - delivery @21/01/2020
+
+- index page
+    - fix title
+    - update author
+    - add favicon.ico
+    - add default padding to 5px
+
 ## 1.1.0 - delivery @20/01/2020
 
 - add onchange event on parameters to automatically generate barcode
