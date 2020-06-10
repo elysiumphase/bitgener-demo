@@ -234,12 +234,12 @@
       box-shadow: 0.2rem 0.8rem 1.6rem black;
     }
 
-    #reset {
+    #reset, #download {
       background-color: transparent;
       color: var(--colorBackgroundParams);
     }
 
-    #reset:hover {
+    #reset:hover, #download:hover {
       background: var(--colorBackgroundParams);
       color: var(--colorBackground);
     }
@@ -750,11 +750,16 @@
         </div>
       </form>
 
-      <!-- reset section -->
+      <!-- process section -->
       <section id="process" class="row content-evenly">
         <!-- reset button -->
         <p>
           <button type="button" id="reset" class="button" name="reset">reset</button>
+        </p>
+
+        <!-- download button -->
+        <p>
+          <button type="button" id="download" class="button" name="download">download</button>
         </p>
       </section>
     </main>
@@ -815,6 +820,7 @@
         marginTop: document.querySelector('label[for=marginTop]'),
       };
       const reset = document.getElementById('reset');
+      const download = document.getElementById('download');
 
       const paramsUnavailableByType = {
         codabar: ['crc', 'rectangular', 'original2DSize'],
@@ -941,6 +947,18 @@
         generateBitcode();
       };
 
+      // download bitcode to a svg file
+      const downloadBitcode = function downloadBitcode() {
+        const svg = bitcode.innerHTML;
+        const blob = new Blob([svg.toString()]);
+        const link = document.createElement('a');
+        link.type = 'image/svg+xml';
+        link.download = `${params.type.value}_${Date.now()}.svg`;
+        link.href = window.URL.createObjectURL(blob);
+        link.click();
+        link.remove();
+      };
+
       // update nb visitors
       const updateVisitors = function updateVisitors(nbVisitors) {
         if (nbVisitors) {
@@ -965,6 +983,7 @@
       // dom events
       document.onanimationend = updateAnimatedElements;
       reset.onclick = resetBitcode;
+      download.onclick = downloadBitcode;
 
       // params events
       Object.keys(params).forEach((name) => {

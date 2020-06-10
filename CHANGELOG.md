@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.2.0 - delivery @10/06/2020
+
+- add a download button
+
 ## 1.1.1 - delivery @21/01/2020
 
 - index page
