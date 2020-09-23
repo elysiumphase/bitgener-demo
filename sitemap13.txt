@@ -1,0 +1,4 @@
+https://bitgener.herokuapp.com/index.html?a=1&amp;b=5
+https://bitgener.herokuapp.com/i&apos;ndex.html
+https://bitgener.herokuapp.com/ind&lt;&gt;ex.html
+https://bitgener.herokuapp.com/ind&quot;ex.html
