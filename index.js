@@ -77,9 +77,9 @@ const httpServer = http.createServer(async (request, response) => {
       response.statusCode = 500;
       response.end(`unable to load google site verification page: ${err.message}`);
     }
-  } else if (request.method === 'GET' && request.url === '/sitemap.txt') {
+  } else if (request.method === 'GET' && request.url.startsWith('/sitemap')) {
     try {
-      const sitemap = getFileStream('sitemap.txt', 'utf-8');
+      const sitemap = getFileStream(request.url.slice(1), 'utf-8');
       response.setHeader('Content-Type', 'text/plain');
       response.statusCode = 200;
       await pipeline(sitemap, response);
