@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.2.3 - delivery @23/09/2020
+
+- deliver sitemap file
+
 ## 1.2.2 - delivery @23/09/2020
 
 - deliver google site verification page
