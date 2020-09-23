@@ -1,1 +1,1 @@
-https://bitgener.herokuapp.com/index*.html
+https://bitgener.herokuapp.com/index!.html
