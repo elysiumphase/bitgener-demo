@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.2.6 - delivery @23/09/2020
+
+- remove google sitemap and link to console
+
 ## 1.2.5 - delivery @23/09/2020
 
 - deliver xml sitemap
