@@ -66,6 +66,17 @@ const httpServer = http.createServer(async (request, response) => {
       response.statusCode = 500;
       response.end(`unable to load favicon: ${err.message}`);
     }
+  } else if (request.method === 'GET' && request.url === '/googlee0d81878ea8f20d1.html') {
+    try {
+      const google = getFileStream('googlee0d81878ea8f20d1.html', 'utf-8');
+      response.setHeader('Content-Type', 'text/html');
+      response.statusCode = 200;
+      await pipeline(google, response);
+    } catch (err) {
+      console.error(err);
+      response.statusCode = 500;
+      response.end(`unable to load google site verification page: ${err.message}`);
+    }
   } else {
     response.statusCode = 404;
     response.end('not found');

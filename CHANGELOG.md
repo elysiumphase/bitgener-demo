@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.2.2 - delivery @23/09/2020
+
+- deliver google site verification page
+
 ## 1.2.1 - delivery @23/09/2020
 
 - link to google console
