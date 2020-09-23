@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.2.5 - delivery @23/09/2020
+
+- deliver xml sitemap
+
 ## 1.2.4 - delivery @23/09/2020
 
 - deliver multiple sitemap files
