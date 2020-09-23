@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.2.1 - delivery @23/09/2020
+
+- link to google console
+- add sitemap
+
 ## 1.2.0 - delivery @10/06/2020
 
 - add a download button
