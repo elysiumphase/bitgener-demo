@@ -1,1 +1,0 @@
-https://bitgener.herokuapp.com/index.html?a=5&b=6#anchor.html
