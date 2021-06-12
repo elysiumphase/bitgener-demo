@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.2.8 - delivery @12/06/2021
+
+- update dependencies
+- update readme
+
 ## 1.2.7 - delivery @08/10/2020
 
 - update bitgener dependency
