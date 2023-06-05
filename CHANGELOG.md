@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.3.1 - delivery @05/06/2023
+
+- docs: remove link to Heroku app
+
 ## 1.3.0 - delivery @05/06/2023
 
 - chore: update dependencies

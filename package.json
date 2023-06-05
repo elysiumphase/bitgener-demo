@@ -1,6 +1,6 @@
 {
   "name": "bitgener-demo",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "The Bitgener Demo",
   "author": "Elysium Phase <hi@elysiumphase.com> (https://github.com/elysiumphase)",
   "main": "index.js",

@@ -6,9 +6,15 @@
   The <a href="https://github.com/elysiumphase/bitgener.git">Bitgener</a> Demo.
 </h1>
 
-<p align="center">
-  <a href="https://bitgener.herokuapp.com/">Show me!</a>
-</p>
+## Start
+
+```shell
+git clone https://github.com/elysiumphase/bitgener-demo.git
+
+npm ci --production
+
+npm start
+```
 
 ## License
 
