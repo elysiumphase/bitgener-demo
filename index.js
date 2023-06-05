@@ -92,7 +92,7 @@ io.on('connection', async (socket) => {
       error: undefined,
       svg: undefined,
     };
-    const bitcodeParams = Object.assign({}, params);
+    const bitcodeParams = { ...params };
     bitcodeParams.output = 'string';
 
     try {
