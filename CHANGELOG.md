@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.3.0 - delivery @05/06/2023
+
+- chore: update dependencies
+- docs: update docs
+
 ## 1.2.8 - delivery @12/06/2021
 
 - update dependencies
