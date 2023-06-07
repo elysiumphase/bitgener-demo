@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.3.2 - delivery @07/06/2023
+
+- docs: fix author
+
 ## 1.3.1 - delivery @05/06/2023
 
 - docs: remove link to Heroku app
